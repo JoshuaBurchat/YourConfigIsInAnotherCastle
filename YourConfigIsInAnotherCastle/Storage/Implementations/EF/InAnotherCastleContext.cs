@@ -10,24 +10,15 @@ using System.Data.Entity.Infrastructure;
 namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
 {
 
-    public interface IInAnotherCastleContext : IDisposable
-    {
-        IDbSet<ConfigurationValue> ConfigurationValues { get; set; }
-        IDbSet<Tag> Tags { get; set; }
-        void AddLogging(Action<string> log);
-
-
-        void SetAdded<T>(T entity) where T : class;
-        void SetModified<T>(T entity) where T : class;
-        void SetDeleted<T>(T entity) where T : class;
-      
-
-        int SaveChanges();
-    }
-
     //TODO add EF as an extention project
     public partial class InAnotherCastleContext : DbContext, IInAnotherCastleContext
     {
+
+        static InAnotherCastleContext()
+        {
+           // Database.SetInitializer<InAnotherCastleContext>(null);
+        }
+
         public InAnotherCastleContext(string connectionString) : base(connectionString)
         {
 

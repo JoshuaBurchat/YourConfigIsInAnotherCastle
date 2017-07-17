@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <configSections >
+    <section xdt:Transform="Insert" name="InAnotherCastleMigrationSettings" type="YourConfigIsInAnotherCastle.Migrations.AspStartup.InAnotherCastleMigrationSettings, YourConfigIsInAnotherCastle.Migrations" />
+  </configSections>
+  <InAnotherCastleMigrationSettings  xdt:Transform="Insert" IsRunningFromWebApplication="true" DestinationFolder="C:\MigrationResults\$rootnamespace$" ConnectionString="Server=(localdb)\v11.0;Integrated Security=true;AttachDbFileName=C:\MigrationResults\$rootnamespace$\YourConfig.mdf;">
+    <add SectionName="" SystemName="" />
+  </InAnotherCastleMigrationSettings>
+</configuration>

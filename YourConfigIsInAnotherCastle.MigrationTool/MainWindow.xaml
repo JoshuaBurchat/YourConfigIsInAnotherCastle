@@ -1,0 +1,170 @@
+﻿<Window x:Class="YourConfigIsInAnotherCastle.MigrationTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YourConfigIsInAnotherCastle.MigrationTool"
+        mc:Ignorable="d"
+        xmlns:Views="clr-namespace:YourConfigIsInAnotherCastle.MigrationTool"
+        xmlns:ViewModels="clr-namespace:YourConfigIsInAnotherCastle.MigrationTool.ViewModels"
+        xmlns:converters="clr-namespace:YourConfigIsInAnotherCastle.MigrationTool.ViewModels.Converters"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        Title="MainWindow" Height="800" Width="1000">
+
+    <Window.Resources>
+        <converters:ViewFormatConverter x:Key="DetailViewSelectionConverter" />
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="2" />
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="auto" MaxHeight="200"  />
+            <RowDefinition Height="45" />
+        </Grid.RowDefinitions>
+        <!--Browse-->
+        <Grid Grid.Row="0"  Height="25" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{Binding SourcePath}"></Label>
+            <Button Grid.Column="1"  Command="{Binding SelectInput}" >Browse</Button>
+        </Grid>
+        <!--Selection-->
+        <ListView  x:Name="sectionList"  Grid.Row="1" ItemsSource="{Binding Sections}"   >
+            <ListView.View>
+                <GridView AllowsColumnReorder="true"   ColumnHeaderToolTip="Employee Information"  >
+                    <GridViewColumn    Header="Migrate">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox  IsChecked="{Binding IsSelectedForMigration}"  />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding=
+                          "{Binding Path=SectionName}" 
+                      Header="Section Name"  />
+                    <GridViewColumn DisplayMemberBinding=
+                          "{Binding Path=SectionTypeName}" 
+                      Header="Section Type" />
+
+
+                </GridView>
+            </ListView.View>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.SetSelectedSection}" CommandParameter="{Binding ElementName=sectionList, Path=SelectedValue}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+
+        <GridSplitter Grid.Row="2" Height="4" HorizontalAlignment="Stretch" />
+
+        <!-- View -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="50*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="25" />
+                <RowDefinition  Height="25" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid  Grid.Row="1" Grid.Column="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="75"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" x:Name="leftTypeSelection" >
+                    <ComboBoxItem IsSelected="True" >Xml</ComboBoxItem>
+                    <ComboBoxItem>XSD</ComboBoxItem>
+                    <ComboBoxItem>Json</ComboBoxItem>
+                    <ComboBoxItem>Json Schema</ComboBoxItem>
+                </ComboBox>
+            </Grid>
+            <Label Grid.Row="0" Content="{Binding SelectedSection.SectionName}"></Label>
+
+            <Grid  Grid.Row="1" Grid.Column="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="75"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" x:Name="rightTypeSelection" >
+                    <ComboBoxItem >Xml</ComboBoxItem>
+                    <ComboBoxItem  IsSelected="True">XSD</ComboBoxItem>
+                    <ComboBoxItem>Json</ComboBoxItem>
+                    <ComboBoxItem>Json Schema</ComboBoxItem>
+                </ComboBox>
+            </Grid>
+
+
+
+            <RichTextBox Grid.Column="0" Grid.Row="2"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <FlowDocument PageWidth="1000" >
+                    <Paragraph>
+                        <Run>
+                            <MultiBinding Converter="{StaticResource  ResourceKey=DetailViewSelectionConverter}">
+                                <Binding Path="SelectedSection" />
+                                <Binding ElementName="leftTypeSelection" Path="SelectedValue.Content" />
+                            </MultiBinding>
+                        </Run>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+
+
+            <GridSplitter Grid.Column="1" Width="7" HorizontalAlignment="Stretch" Grid.Row="2"/>
+            <RichTextBox Grid.Column="2" Grid.Row="2"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                <FlowDocument PageWidth="1000" >
+                    <Paragraph>
+                        <Run>
+                            <MultiBinding Converter="{StaticResource  ResourceKey=DetailViewSelectionConverter}">
+                                <Binding Path="SelectedSection" />
+                                <Binding ElementName="rightTypeSelection" Path="SelectedValue.Content" />
+                            </MultiBinding>
+                        </Run>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+
+        </Grid>
+
+        <ListView   Grid.Row="4" ItemsSource="{Binding ErrorMessages}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Foreground="Red" Text="{Binding }" FontWeight="Bold" />
+                </DataTemplate> 
+            </ListView.ItemTemplate>
+        </ListView>
+        <Grid Grid.Row="5"  Height="25" VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="1">Server</Label>
+            <TextBox Grid.Column="2" Text="{Binding DestinationConnectionString.ServerNamePath}" IsEnabled="{Binding ElementName=isLocalDbSelection, Path=IsChecked, Converter={StaticResource  ResourceKey=InverseBooleanConverter}}"></TextBox>
+            <Label Grid.Column="3">Database</Label>
+            <TextBox Grid.Column="4"  Text="{Binding DestinationConnectionString.DatabaseName}"></TextBox>
+            <CheckBox Grid.Column="5"  x:Name="isLocalDbSelection" IsChecked="{Binding DestinationConnectionString.IsLocalDatabase}" VerticalAlignment="Center">Is Local DB</CheckBox>
+
+            <Button Grid.Column="7"  Command="{Binding SaveOutput}" >Save</Button>
+        </Grid>
+
+    </Grid>
+
+</Window>

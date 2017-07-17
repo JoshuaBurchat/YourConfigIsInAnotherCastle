@@ -1,0 +1,13 @@
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\YourConfigIsInAnotherCastle.dll.config
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\YourConfigIsInAnotherCastle.dll
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\YourConfigIsInAnotherCastle.pdb
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\EntityFramework.dll
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\Newtonsoft.Json.dll
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\Newtonsoft.Json.Schema.dll
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\EntityFramework.xml
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\Newtonsoft.Json.xml
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\bin\Release\Newtonsoft.Json.Schema.xml
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\obj\Release\YourConfigIsInAnotherCastle.dll
+C:\Users\joshu\Source\Repos\YourConfigurationIsInAnotherCastle\YourConfigIsInAnotherCastle\obj\Release\YourConfigIsInAnotherCastle.pdb

@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace YourConfigIsInAnotherCastle.Configuration
 {
-    public partial class InAnotherCastleConfigSection  : ConfigurationSection, IInAnotherCastleConfiguration
+    public partial class InAnotherCastleConfigSection : ConfigurationSection, IInAnotherCastleConfiguration
     {
 
         [ConfigurationProperty("ServiceProviderType", DefaultValue = "", IsRequired = true)]

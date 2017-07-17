@@ -1,0 +1,30 @@
+﻿@model YourConfigIsInAnotherCastle.Example.Mvc.Models.HomeModel
+
+@{
+    ViewBag.Title = "Show Configuration Page";
+}
+<h3>This page simply shows the configuration values currently loaded.. nothing fancy</h3>
+<h4>File Paths</h4>
+<div>
+    <div><label>Help Documents Path:</label>@Model.FilePaths.HelpDocumentPath</div>
+    <div><label>Log Path:</label>@Model.FilePaths.LoggingPath</div>
+    <div><label>Temp File Path:</label>@Model.FilePaths.ServerTemporaryStoragePath</div>
+</div>
+<h4>Common Messages</h4>
+<div>
+    <div><label>Greeting:</label>@Model.CommonMessages.Greeting</div>
+    <div><label>Unsupported Feature:</label>@Model.CommonMessages.UnsupportedFeature</div>
+    <div><label>Unauthorized Warning:</label>@Model.CommonMessages.UnauthorizedWarning</div>
+    <div><label>Error Saving:</label>@Model.CommonMessages.ErrorSaving</div>
+</div>
+<h4>Contact Details</h4>
+<div>
+    <ul>
+        @foreach (var contact in Model.ContactDetails.Contacts)
+        {
+            <li>
+                @contact.DepartmentName - @contact.EmailContact - @contact.PhoneNumber
+            </li>
+        }
+    </ul>
+</div>

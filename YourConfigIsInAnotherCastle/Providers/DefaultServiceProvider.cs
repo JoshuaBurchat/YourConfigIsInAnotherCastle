@@ -35,6 +35,7 @@ namespace YourConfigIsInAnotherCastle
             {
                 throw new InAnotherCastleInvalidConfigurationException(string.Format("Expected connection string under the name {0} for the default storage implementation", DefaultServiceProvider.ConnectionStringKey));
             }
+
             return new ConfigurationStorage(
                 connectionString.ConnectionString,
                 GetLogger()

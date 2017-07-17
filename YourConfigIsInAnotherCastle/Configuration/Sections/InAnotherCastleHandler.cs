@@ -134,7 +134,7 @@ namespace YourConfigIsInAnotherCastle
                         }
                         else
                         {
-                            throw new InAnotherCastleInvalidConfigurationException(string.Format( "Invalid Mode type, must be within the Enum ({0})", typeof(Mode).FullName));
+                            throw new InAnotherCastleInvalidConfigurationException(string.Format("Invalid Mode type, must be within the Enum ({0})", typeof(Mode).FullName));
                         }
                     }
                     return cacheResults;
@@ -146,8 +146,9 @@ namespace YourConfigIsInAnotherCastle
                 }
             );
         }
+
     }
 
-   
+
 
 }
