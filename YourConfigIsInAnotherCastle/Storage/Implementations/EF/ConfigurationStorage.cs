@@ -34,7 +34,7 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
 
         public IQueryable<Models.ConfigurationValue> GetConfigurationSections(IEnumerable<int> tags = null)
         {
-            IQueryable<ConfigurationValue> records = this.Context.ConfigurationValues;
+            IQueryable<ConfigurationValue> records = this.Context.ConfigurationValues.Where(c => !c.Deleted);
             if (tags != null && tags.Any())
             {
                 records = records.Where(r => r.Tags.Any(t => tags.Contains(t.Id)));
@@ -46,11 +46,11 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
 
             if (!string.IsNullOrWhiteSpace(systemName))
             {
-                return Context.ConfigurationValues.Where(c => c.SystemName == systemName);
+                return Context.ConfigurationValues.Where(c => c.SystemName == systemName && !c.Deleted);
             }
             else
             {
-                return Context.ConfigurationValues.Where(c => (c.SystemName == null || c.SystemName.Trim() == string.Empty));
+                return Context.ConfigurationValues.Where(c => (c.SystemName == null || c.SystemName.Trim() == string.Empty) && !c.Deleted);
             }
         }
         public Models.ConfigurationValue GetConfigurationSection(int id)
@@ -59,30 +59,99 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
             return results;
         }
 
+        private ErrorMap AddUpdateTagsConfigurationTags(ConfigurationValue configuration, IEnumerable<Tag> tags)
+        {
 
-        public ConfigurationSaveResults AddConfigurationSection(ConfigurationNew newConfiguration)
+            var tagListFromContext = new List<Tag>();
+            foreach (var tag in tags)
+            {
+                if (tag.Id != 0)
+                {
+                    var existingTag = this.Context.Tags.Find(tag.Id);
+                    if (existingTag != null)
+                    {
+                        tagListFromContext.Add(existingTag);
+                    }
+                    else
+                    {
+                        return new ErrorMap()
+                        {
+                            Code = DataStorageError.RecordNotFound,
+                            Message = string.Format("One of the tags specified could not be found {0} : {1}", tag.Value, tag.Id)
+                        };
+                    }
+
+                }
+                if (tag.Id == 0)
+                {
+                    var tagByValue = this.Context.Tags.FirstOrDefault(t => t.Value == tag.Value);
+                    tagListFromContext.Add(tagByValue ?? tag);
+                }
+            }
+
+            var previousTagIds = configuration.Tags.Select(t => t.Id).ToArray();
+
+            //Either id 0 or not already added
+            var toAddToConfig = tagListFromContext.Where(t => t.Id == 0 || !previousTagIds.Any(p => p == t.Id)).ToArray();
+            var toRemoveFromConfig = configuration.Tags.Where(t => !tagListFromContext.Any(c => c.Id == t.Id)).ToArray();
+
+
+
+            foreach (var newTag in toAddToConfig.Where(t => t.Id == 0))
+            {
+                this.Context.Tags.Add(newTag);
+                this.Context.SetAdded(newTag);
+            }
+
+            configuration.Tags.Clear();
+            configuration.Tags.AddRange(tagListFromContext);
+            Context.SetChangesToConfigurationTags(configuration, toAddToConfig, toRemoveFromConfig);
+            return null;
+        }
+
+        private ConfigurationSaveResults AddUpdateConfigurationSection(int? id, ConfigurationNew newConfiguration)
         {
             var results = new ConfigurationSaveResults()
             {
             };
             if (string.IsNullOrWhiteSpace(newConfiguration.Name))
             {
-                results.AddError("The Json does not match the schema", DataStorageError.MissingNameField);
+                results.AddError("The Name field cannot be empty", DataStorageError.MissingNameField);
             }
             else
             {
-                var existingRecord = GetConfigurationSection(newConfiguration.Name, newConfiguration.SystemName);
-                if (existingRecord == null)
+                ConfigurationValue record = new ConfigurationValue();
+                var existingRecordByNames = GetConfigurationSection(newConfiguration.Name, newConfiguration.SystemName);
+                if (id.HasValue)
                 {
-
-                    var record = new ConfigurationValue()
+                    record = GetConfigurationSection(id.Value);
+                    if (record == null)
                     {
-                        JSONSchema = newConfiguration.JSONSchema,
-                        Name = newConfiguration.Name,
-                        SystemName = newConfiguration.SystemName,
-                        XML = newConfiguration.XML,
-                        XMLSchema = newConfiguration.XMLSchema
-                    };
+                        results.AddError("Record not found for the requested id", DataStorageError.RecordNotFound);
+                        return results;
+                    }
+                    else if (existingRecordByNames != null && record.Id == existingRecordByNames.Id)
+                    {
+                        //This means the existing record by this name matches, otherwise the logic below will return the existing name error
+                        existingRecordByNames = null;
+                    }
+                }
+                //Previously deleted, will be brought back, it history should be maintained in the history tables.
+                if (existingRecordByNames != null && existingRecordByNames.Deleted)
+                {
+                    record = existingRecordByNames;
+                    existingRecordByNames = null;
+                }
+
+                if (existingRecordByNames == null)
+                {
+                    record.JSONSchema = newConfiguration.JSONSchema;
+                    record.Name = newConfiguration.Name;
+                    record.SystemName = newConfiguration.SystemName;
+                    record.XML = newConfiguration.XML;
+                    record.XMLSchema = newConfiguration.XMLSchema;
+                    record.Deleted = false;
+                    //Tags taken care of below
                     var xmlSchema = GetSchema(record.XMLSchema);
                     if (xmlSchema != null)
                     {
@@ -94,13 +163,29 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
                             if (ValidateJson(json, record.JSONSchema))
                             {
                                 record.JSON = json;
-                                Context.ConfigurationValues.Add(record);
-                                Context.SetAdded(record);
-                                var changes = Context.SaveChanges();
-                                if (changes == 0)
-                                    results.AddError("No records were removed ensure the id is correct.", DataStorageError.RecordsUnchanged);
+
+                                if (id.HasValue)
+                                {
+                                    Context.SetModified(record);
+                                }
                                 else
-                                    results.Record = record;
+                                {
+                                    Context.ConfigurationValues.Add(record);
+                                    Context.SetAdded(record);
+                                }
+                                var tagErrors = this.AddUpdateTagsConfigurationTags(record, newConfiguration.Tags);
+                                if (tagErrors == null)
+                                {
+                                    var changes = Context.SaveChanges();
+                                    if (changes == 0)
+                                        results.AddError("No records were removed ensure the id is correct.", DataStorageError.RecordsUnchanged);
+                                    else
+                                        results.Record = record;
+                                }
+                                else
+                                {
+                                    results.Errors.Add(tagErrors);
+                                }
                             }
                             else
                             {
@@ -122,9 +207,22 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
                     results.AddError("Name and System Name already exist", DataStorageError.AlreadyExists);
                 }
             }
+            if(!results.Successful)
+            {
+                Context.ClearChanges();
+            }
             return results;
         }
 
+        public ConfigurationSaveResults AddConfigurationSection(ConfigurationNew newConfiguration)
+        {
+            return AddUpdateConfigurationSection(null, newConfiguration);
+        }
+
+        public ConfigurationSaveResults UpdateConfigurationSection(int id, ConfigurationNew newConfiguration)
+        {
+            return AddUpdateConfigurationSection(id, newConfiguration);
+        }
 
         public ConfigurationValue GetConfigurationSection(string name, string systemName = null)
         {
@@ -150,7 +248,8 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
             };
 
             Context.ConfigurationValues.Attach(record);
-            Context.SetDeleted(record);
+            record.Deleted = true;
+            Context.SetModified(record);
             var changes = Context.SaveChanges();
             if (changes == 0)
             {
@@ -234,7 +333,6 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
                 if (ValidateJson(json, record.JSONSchema))
                 {
                     var xmlSchema = GetSchema(record.XMLSchema);
-                    //  string root = ((XmlSchemaElement)xmlSchema.Items[0]).Name;
                     //TODO some checks on the type throw exception
                     string xml = JsonConvert.DeserializeXmlNode(json).OuterXml;
                     if (ValidateXml(xml, xmlSchema))
@@ -332,6 +430,19 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
             }
 
             return results;
+        }
+
+        public IQueryable<Tag> GetTags(bool includeInactive = false)
+        {
+            if (includeInactive)
+            {
+                return Context.Tags;
+            }
+            else
+            {
+                //All active tags, they are associated to an active config record
+                return Context.Tags.Where(t => t.ConfigurationValues.Any(c => !c.Deleted));
+            }
         }
 
         public void Dispose()

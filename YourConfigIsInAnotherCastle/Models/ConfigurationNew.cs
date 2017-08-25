@@ -9,13 +9,13 @@ namespace YourConfigIsInAnotherCastle.Models
     {
         public string Name { get; set; }
         public string SystemName { get; set; }
-        public  List<int> TagIds { get; private set; }
+        public  List<Tag> Tags { get;  set; }
         public string XML { get; set; }
         public string XMLSchema { get; set; }
         public string JSONSchema { get; set; }
         public ConfigurationNew()
         {
-            TagIds = new List<int>();
+            this.Tags = new List<Tag>();
         }
     }
 }

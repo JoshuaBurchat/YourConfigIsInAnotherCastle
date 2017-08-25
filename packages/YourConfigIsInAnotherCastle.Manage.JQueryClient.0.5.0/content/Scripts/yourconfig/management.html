@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="nameContainsFilter">Name Contains:</label>
+                        <input type="text" class="form-control" id="nameContainsFilter" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="systemNameFilter">System Name:</label>
+                        <select class="form-control" id="systemNameFilter"><option value="">Select One</option><option value="Test">Test</option></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Tags Selected</label>
+                        <div>
+                            <span id="selectedTagsContainers">
+                            </span>
+                            <span><select class="btn btn-default" type="text" id="tagSelection"></select></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width:60px">Data</th>
+                    <th style="width:60px">Schema</th>
+                    <th>System</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Tags</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody id="configurationList"></tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="schemaEntryDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="schemaEntryTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="container-fluid">
+
+                            <label for="schemaEntryName">Name:</label>
+                            <input type="text" class="form-control" id="schemaEntryName" />
+                            <label for="schemaEntrySystemName">System Name:</label>
+                            <input type="text" class="form-control" id="schemaEntrySystemName" />
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="container-fluid">
+                                        <label>Tags Selected</label>
+                                        <div class="input-group">
+                                            <span id="schemaEntrySelectedTagsContainers">
+                                            </span>
+                                            <span><select class="btn btn-default" type="text" id="schemaEntryTagSelection"></select></span>
+                                            <span><input class="btn btn-default" id="schemaEntryNewTag" /></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <label for="schemaEntryXmlData">Xml Data:</label>
+                            <textarea rows="10" class="form-control" id="schemaEntryXmlData"></textarea>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label for="schemaEntryXmlSchema">Xml Schema:</label>
+                                    <textarea rows="10" wrap="soft" class="form-control" id="schemaEntryXmlSchema"></textarea>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="schemaEntryJsonSchema">Json Schema:</label>
+                                    <textarea rows="10" wrap="soft" class="form-control" id="schemaEntryJsonSchema"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" id="schemaEntrySave">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="entryDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="entryDialogTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="col-sm-12" id="entryForm"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="messageDialogTitle"></h4>
+                </div>
+                <div id="messageDialogBody" class="modal-body alert alert-success">
+                    <h4 id="messageHeader"></h4>
+                    <ul id="messageDetailList"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src='https://cdn.polyfill.io/v2/polyfill.min.js'></script>
+    <script src='https://unpkg.com/react@15.3.1/dist/react.min.js'></script>
+    <script src='https://unpkg.com/react-dom@15.3.1/dist/react-dom.min.js'></script>
+    <script src='https://unpkg.com/react-jsonschema-form/dist/react-jsonschema-form.js'></script>
+
+    <script src="~/Scripts/yourconfig/camel-object-formatter.js"></script>
+    <script src="~/Scripts/yourconfig/react-jsonschema-form-wrapper.js"></script>
+    <script src="~/Scripts/yourconfig/yourconfig-data-services.js"></script>
+    <script src="~/Scripts/yourconfig/yourconfig-viewmodels.js"></script>
+    <script src="~/Scripts/yourconfig/yourconfig-ui-controller.js"></script>
+</body>
+</html>

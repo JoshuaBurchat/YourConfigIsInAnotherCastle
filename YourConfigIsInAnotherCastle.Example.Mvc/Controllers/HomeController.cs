@@ -12,14 +12,21 @@ namespace YourConfigIsInAnotherCastle.Example.Mvc.Controllers
     {
         public ActionResult Index()
         {
+
             HomeModel model = new HomeModel()
             {
                 CommonMessages = (ICommonMessages)ConfigurationManager.GetSection("CommonMessages"),
                 ContactDetails = (IContactDetails)ConfigurationManager.GetSection("ContactDetails"),
                 FilePaths = (IFilePaths)ConfigurationManager.GetSection("FilePaths"),
             };
-            
             return View(model);
+
+
+        }
+
+        public ActionResult Config()
+        {
+            return View();
         }
     }
 }

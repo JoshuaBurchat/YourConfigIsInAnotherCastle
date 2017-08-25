@@ -61,24 +61,6 @@
     <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.Schema.3.0.1\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="NJsonSchema, Version=9.4.2.0, Culture=neutral, PublicKeyToken=c2f9c3bdfae56102, processorArchitecture=MSIL">
-      <HintPath>..\packages\NJsonSchema.9.4.2\lib\net45\NJsonSchema.dll</HintPath>
-    </Reference>
-    <Reference Include="NJsonSchema.CodeGeneration, Version=9.4.2.0, Culture=neutral, PublicKeyToken=c2f9c3bdfae56102, processorArchitecture=MSIL">
-      <HintPath>..\packages\NJsonSchema.CodeGeneration.9.4.2\lib\net451\NJsonSchema.CodeGeneration.dll</HintPath>
-    </Reference>
-    <Reference Include="NJsonSchema.CodeGeneration.CSharp, Version=9.4.2.0, Culture=neutral, PublicKeyToken=c2f9c3bdfae56102, processorArchitecture=MSIL">
-      <HintPath>..\packages\NJsonSchema.CodeGeneration.CSharp.9.4.2\lib\net451\NJsonSchema.CodeGeneration.CSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -132,9 +114,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -144,10 +123,19 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="YourConfigIsInAnotherCastle, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YourConfigIsInAnotherCastle.1.0.1\lib\YourConfigIsInAnotherCastle.dll</HintPath>
+      <HintPath>..\packages\YourConfigIsInAnotherCastle.1.0.2\lib\YourConfigIsInAnotherCastle.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ApplicationInsights">
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
     </Reference>
@@ -173,25 +161,33 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Configuration\ContactDetails.cs" />
     <Compile Include="Models\Configuration\CommonMessages.cs" />
+    <Compile Include="Models\Configuration\ContactDetails.cs" />
+    <Compile Include="Models\Configuration\FilePaths.cs" />
     <Compile Include="Models\Configuration\ICommonMessages.cs" />
     <Compile Include="Models\Configuration\IContactDetails.cs" />
-    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\Configuration\IFilePaths.cs" />
-    <Compile Include="Models\Configuration\FilePaths.cs" />
+    <Compile Include="Models\DTOConfigurationDeletion.cs" />
+    <Compile Include="Models\DTOConfigurationIncludingSchemaDetails.cs" />
+    <Compile Include="Models\DTOConfigurationSaveResults.cs" />
+    <Compile Include="Models\DTOConfigurationUpdate.cs" />
+    <Compile Include="Models\DTOConfigurationValue.cs" />
+    <Compile Include="Models\DTOTag.cs" />
+    <Compile Include="Models\FormatTypeId.cs" />
+    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\YourConfiguration.mdf" />
-    <Content Include="App_Data\YourConfiguration_log.ldf">
-      <DependentUpon>YourConfiguration.mdf</DependentUpon>
+    <Content Include="App_Data\YourConfigurationClient.mdf" />
+    <Content Include="App_Data\YourConfigurationClient_log.ldf">
+      <DependentUpon>YourConfigurationClient.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -199,13 +195,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="readme.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -217,6 +211,13 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\yourconfig\camel-object-formatter.js" />
+    <Content Include="Scripts\yourconfig\management.html" />
+    <Content Include="Scripts\yourconfig\react-jsonschema-form-wrapper.js" />
+    <Content Include="Scripts\yourconfig\setup-readme.txt" />
+    <Content Include="Scripts\yourconfig\yourconfig-data-services.js" />
+    <Content Include="Scripts\yourconfig\yourconfig-ui-controller.js" />
+    <Content Include="Scripts\yourconfig\yourconfig-viewmodels.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -231,6 +232,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Config.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -264,9 +266,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51531</DevelopmentServerPort>
+          <DevelopmentServerPort>62370</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51531/</IISUrl>
+          <IISUrl>http://localhost:62370/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

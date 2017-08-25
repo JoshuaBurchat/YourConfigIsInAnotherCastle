@@ -15,6 +15,8 @@ namespace YourConfigIsInAnotherCastle.Models
         public string XMLSchema { get; set; }
         public string JSON { get; set; }
         public string JSONSchema { get; set; }
+        public bool Deleted { get;  set; }
+
         public ConfigurationValue()
         {
             Tags = new List<Tag>();

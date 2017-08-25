@@ -74,7 +74,17 @@ namespace YourConfigIsInAnotherCastle.Test.Mocks
                 throw new NotImplementedException();
             }
 
+            public IQueryable<Tag> GetTags(bool includeInactive = false)
+            {
+                throw new NotImplementedException();
+            }
+
             public ConfigurationSaveResults RemoveConfigurationSection(int id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public ConfigurationSaveResults UpdateConfigurationSection(int id, ConfigurationNew configuration)
             {
                 throw new NotImplementedException();
             }

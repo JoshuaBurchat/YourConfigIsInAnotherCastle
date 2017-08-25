@@ -6,6 +6,7 @@ using System.Data.Entity;
 using YourConfigIsInAnotherCastle.Models;
 using YourConfigIsInAnotherCastle.Storage.Implementations.EF.Maps;
 using System.Data.Entity.Infrastructure;
+using System.Linq.Expressions;
 
 namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
 {
@@ -16,7 +17,7 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
 
         static InAnotherCastleContext()
         {
-           // Database.SetInitializer<InAnotherCastleContext>(null);
+            // Database.SetInitializer<InAnotherCastleContext>(null);
         }
 
         public InAnotherCastleContext(string connectionString) : base(connectionString)
@@ -33,20 +34,63 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
             this.Database.Log += log;
         }
 
+        public void ClearChanges()
+        {
+            foreach (var entry in this.ChangeTracker.Entries())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Modified:
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified; //Revert changes made to deleted entity.
+                        entry.State = EntityState.Unchanged;
+                        break;
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+                }
+            }
+        }
         public void SetAdded<T>(T entity) where T : class
         {
             this.Entry(entity).State = EntityState.Added;
         }
 
+            //Note this is to ensure that the tags used are in the current context and are attached properly
+        public void SetChangesToConfigurationTags(ConfigurationValue configurationValue, IEnumerable<Tag> added, IEnumerable<Tag> removed)
+        {
+            var adapter = (IObjectContextAdapter)this;
+            foreach(var tag in added)
+            {
+                adapter.ObjectContext.ObjectStateManager.ChangeRelationshipState(configurationValue, tag, c => c.Tags, EntityState.Added);
+                adapter.ObjectContext.ObjectStateManager.ChangeRelationshipState(tag, configurationValue, c => c.ConfigurationValues, EntityState.Added);
+            }
+            foreach (var tag in removed)
+            {
+                adapter.ObjectContext.ObjectStateManager.ChangeRelationshipState(configurationValue, tag, c => c.Tags, EntityState.Deleted);
+                adapter.ObjectContext.ObjectStateManager.ChangeRelationshipState(tag, configurationValue, c => c.ConfigurationValues, EntityState.Deleted);
+            }
+         
+        }
+     
         public void SetDeleted<T>(T entity) where T : class
         {
             this.Entry(entity).State = EntityState.Deleted;
         }
-
         public void SetModified<T>(T entity) where T : class
         {
             this.Entry(entity).State = EntityState.Modified;
         }
+        //ctx
+        //.ObjectContext
+        //.ObjectStateManager
+        //.ChangeRelationshipState(
+        //    a,
+        //    b,
+        //    getNavigationProperty,
+        //    state
+        //);
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -55,5 +99,7 @@ namespace YourConfigIsInAnotherCastle.Storage.Implementations.EF
 
             base.OnModelCreating(modelBuilder);
         }
+
+    
     }
 }

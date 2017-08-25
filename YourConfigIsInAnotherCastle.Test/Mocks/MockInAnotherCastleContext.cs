@@ -41,7 +41,6 @@ namespace YourConfigIsInAnotherCastle.Test.Mocks
      
         public void AddLogging(Action<string> log)
         {
-            //TODO
         }
         public void Dispose()
         {
@@ -58,10 +57,10 @@ namespace YourConfigIsInAnotherCastle.Test.Mocks
             {
                 var modified = Modified.Count;
                 var deleted = Deleted.Count;
+                var added = Added.Count;
+           
+                return modified + deleted + added;
 
-                Modified.Clear();
-                Deleted.Clear();
-                return modified + deleted;
             }
         }
 
@@ -79,5 +78,25 @@ namespace YourConfigIsInAnotherCastle.Test.Mocks
         {
             this.Added.Add(entity);
         }
+        
+        public void SetChangesToConfigurationTags(ConfigurationValue configurationValue, IEnumerable<Tag> added, IEnumerable<Tag> removed)
+        {
+            //Maybe should aggregate but I dont care for the testing
+            if (!ConfigTagAddTransactions.ContainsKey(configurationValue)) ConfigTagAddTransactions.Remove(configurationValue);
+            ConfigTagAddTransactions.Add(configurationValue, added);
+            if (!ConfigTagRemoveTransactions.ContainsKey(configurationValue)) ConfigTagRemoveTransactions.Remove(configurationValue);
+            ConfigTagRemoveTransactions.Add(configurationValue, removed);
+        }
+
+        public void ClearChanges()
+        {
+            this.Added.Clear();
+            this.Deleted.Clear();
+            this.Modified.Clear();
+        }
+
+        //There is probably a better way, however this should be be good enought for testing
+        public Dictionary<ConfigurationValue, IEnumerable<Tag>> ConfigTagAddTransactions = new Dictionary<ConfigurationValue, IEnumerable<Tag>>();
+        public Dictionary<ConfigurationValue, IEnumerable<Tag>> ConfigTagRemoveTransactions = new Dictionary<ConfigurationValue, IEnumerable<Tag>>();
     }
 }

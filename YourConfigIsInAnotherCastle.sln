@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YourConfigIsInAnotherCastle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YourConfigIsInAnotherCastle.Test", "YourConfigIsInAnotherCastle.Test\YourConfigIsInAnotherCastle.Test.csproj", "{93963BC2-A117-42B9-8A6B-48943908173C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget_Packages", "Nuget_Packages", "{A654687C-A2A1-49CC-9AA6-0B14F6818D10}"
+	ProjectSection(SolutionItems) = preProject
+		YourConfigIsInAnotherCastle\Nuget_Packages\yourconfigisinanothercastle.1.0.1.nupkg = YourConfigIsInAnotherCastle\Nuget_Packages\yourconfigisinanothercastle.1.0.1.nupkg
+		YourConfigIsInAnotherCastle\Nuget_Packages\yourconfigisinanothercastle.1.0.2.nupkg = YourConfigIsInAnotherCastle\Nuget_Packages\yourconfigisinanothercastle.1.0.2.nupkg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
